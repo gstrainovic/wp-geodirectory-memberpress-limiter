@@ -147,7 +147,7 @@ function wpb_demo_shortcode()
 
 }
 // // register shortcode
-add_shortcode('greeting', 'wpb_demo_shortcode');
+add_shortcode('gd-mp-pl', 'wpb_demo_shortcode');
 
 function run_geodirectorymemberpresspostlimit() {
 
