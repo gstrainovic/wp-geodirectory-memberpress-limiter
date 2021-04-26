@@ -13,14 +13,14 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/wp-content/plugins/geodirectory/inclu
  * that starts the plugin.
  *
  * @link              https://www.strainovic-it.ch
- * @since             1.0.0
+ * @since             1.0.1
  * @package           Geodirectorymemberpresspostlimit
  *
  * @wordpress-plugin
  * Plugin Name:       GeoDirectoryMemberPressPostLimit
  * Plugin URI:        https://www.strainovic-it.ch
- * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
- * Version:           1.0.0
+ * Description:       Beschränk die Anzahl Waschanlagen je nach Abo.
+ * Version:           1.0.1
  * Author:            Goran Strainovic
  * Author URI:        https://www.strainovic-it.ch
  * License:           GPL-2.0+
@@ -30,7 +30,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/wp-content/plugins/geodirectory/inclu
  */
 
 // If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
+if (!defined('WPINC')) {
 	die;
 }
 
@@ -39,14 +39,15 @@ if ( ! defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'GEODIRECTORYMEMBERPRESSPOSTLIMIT_VERSION', '1.0.0' );
+define('GEODIRECTORYMEMBERPRESSPOSTLIMIT_VERSION', '1.0.1');
 
 /**
  * The code that runs during plugin activation.
  * This action is documented in includes/class-geodirectorymemberpresspostlimit-activator.php
  */
-function activate_geodirectorymemberpresspostlimit() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-geodirectorymemberpresspostlimit-activator.php';
+function activate_geodirectorymemberpresspostlimit()
+{
+	require_once plugin_dir_path(__FILE__) . 'includes/class-geodirectorymemberpresspostlimit-activator.php';
 	Geodirectorymemberpresspostlimit_Activator::activate();
 }
 
@@ -54,19 +55,20 @@ function activate_geodirectorymemberpresspostlimit() {
  * The code that runs during plugin deactivation.
  * This action is documented in includes/class-geodirectorymemberpresspostlimit-deactivator.php
  */
-function deactivate_geodirectorymemberpresspostlimit() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-geodirectorymemberpresspostlimit-deactivator.php';
+function deactivate_geodirectorymemberpresspostlimit()
+{
+	require_once plugin_dir_path(__FILE__) . 'includes/class-geodirectorymemberpresspostlimit-deactivator.php';
 	Geodirectorymemberpresspostlimit_Deactivator::deactivate();
 }
 
-register_activation_hook( __FILE__, 'activate_geodirectorymemberpresspostlimit' );
-register_deactivation_hook( __FILE__, 'deactivate_geodirectorymemberpresspostlimit' );
+register_activation_hook(__FILE__, 'activate_geodirectorymemberpresspostlimit');
+register_deactivation_hook(__FILE__, 'deactivate_geodirectorymemberpresspostlimit');
 
 /**
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
-require plugin_dir_path( __FILE__ ) . 'includes/class-geodirectorymemberpresspostlimit.php';
+require plugin_dir_path(__FILE__) . 'includes/class-geodirectorymemberpresspostlimit.php';
 
 
 
@@ -81,34 +83,35 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-geodirectorymemberpresspos
  * @since    1.0.0
  */
 
-function user_can_add_post2( $args = array() ) {
+function user_can_add_post2($args = array())
+{
 
 	$defaults = array(
 		'post_type' => '',
 		'post_author' => null
 	);
 
-	$params = wp_parse_args( $args, $defaults );
+	$params = wp_parse_args($args, $defaults);
 
 	$can_add = true;
 
 	// Post author
-	if ( $params['post_author'] === null && is_user_logged_in() ) {
+	if ($params['post_author'] === null && is_user_logged_in()) {
 		$params['post_author'] = (int) get_current_user_id();
 	}
 
-	if ( ! current_user_can( 'manage_options' ) ) {
-		if ( ! empty( $params['post_author'] ) && ! user_can( (int) $params['post_author'], 'manage_options' ) ) {
-			$posts_limit = (int) GeoDir_Post_Limit::cpt_posts_limit( $params['post_type'], $params['post_author'] );
+	if (!current_user_can('manage_options')) {
+		if (!empty($params['post_author']) && !user_can((int) $params['post_author'], 'manage_options')) {
+			$posts_limit = (int) GeoDir_Post_Limit::cpt_posts_limit($params['post_type'], $params['post_author']);
 
-			if ( $posts_limit > 0 ) {
-				$posts_count = (int) GeoDir_Post_Limit::count_user_cpt_posts( $params );
+			if ($posts_limit > 0) {
+				$posts_count = (int) GeoDir_Post_Limit::count_user_cpt_posts($params);
 
 				// Limit exceed.
-				if ( $posts_limit <= $posts_count ) {
+				if ($posts_limit <= $posts_count) {
 					$can_add = false;
 				}
-			} else if ( $posts_limit < 0 ) {
+			} else if ($posts_limit < 0) {
 				$can_add = false; // Disabled from CPT
 			}
 		}
@@ -119,41 +122,46 @@ function user_can_add_post2( $args = array() ) {
 		'posts_limit' => $posts_limit,
 		'can_add' => $can_add,
 		'params' => $params,
-		'args' => $args 
+		'args' => $args
 	];
 
 	return $return;
 }
 
 // function that runs when shortcode is called
-function wpb_demo_shortcode()
+function run_shortcode()
 {
 
 	$gd_add_listing = '[gd_add_listing mapzoom="0" label_type="horizontal" show_login="1" mb="3"]';
-	$args = array( 'post_type' => 'gd_place' );
+	$args = array('post_type' => 'gd_place');
 	$can_add_post = user_can_add_post2($args);
 
-	// 8240 = S ok benutzer
-	// 8257 = M 
-	// 8258 = L
 
-	if (current_user_can('mepr-active','memberships:8240,8257') and $can_add_post['posts_count']===0) {
-		return do_shortcode($gd_add_listing);
-	} elseif (current_user_can('mepr-active','membership:8258') and $can_add_post['posts_count']<5) {
-		return do_shortcode($gd_add_listing);
-	} else { 
-		return do_shortcode('<h3>Bitte erhöhen Sie Ihr Abo um mehr Waschstrassen hinzuzufügen.</h3>');
-	};
+	$plusMitgliedschaft5WA = 'membership:31395,8258,31391,31363,31363,31360';
+	$standardMitgliedschaft1WA = 'memberships:31393,31366,31389,8257,31382,8240';
+	$mehrAls5WA = '<br><h3>Falls Sie mehr als 5x Waschanlagen benötigen, kontaktieren Sie uns und Sie erhalten ein Spezialangebot.</h3>';
+
+	if (current_user_can('mepr-active', $plusMitgliedschaft5WA) and $can_add_post['posts_count'] < 5) {
+		return do_shortcode($gd_add_listing); // Plus Abos unter 5x WA dürfen noch bis 5x WA erstellen
+	} elseif (current_user_can('mepr-active', $plusMitgliedschaft5WA) and $can_add_post['posts_count'] === 5) {
+		return do_shortcode('<h3>Bitte kontaktieren Sie uns für ein Spezialangebot, um mehr als 5x Waschanlagen hinzuzufügen.</h3>');
+	} elseif (current_user_can('mepr-active', $standardMitgliedschaft1WA) and $can_add_post['posts_count'] === 0) {
+		return do_shortcode($gd_add_listing); // Standard ohne WA dürfen 1x WA erstellen
+	} elseif (current_user_can('mepr-active', $standardMitgliedschaft1WA) and $can_add_post['posts_count'] === 1) {
+		return do_shortcode('<h3>Bitte erhöhen Sie Ihre Mitgliedschaft auf Plus um bis zu 5x Waschanlagen hinzuzufügen.</h3>'.$mehrAls5WA);
+	} else {
+		return do_shortcode('<h3>Bitte schliessen Sie eine Mitgliedschaft ab um eine Waschanlagen hinzuzufügen.</h3><br><h3>Mit einer Plus Mitgliedschaft können Sie bis zu 5x Waschanlagen hinzufügen.</h3>'.$mehrAls5WA);
+	}
 
 }
 // // register shortcode
-add_shortcode('greeting', 'wpb_demo_shortcode');
+add_shortcode('gd-wp-pl', 'run_shortcode');
 
-function run_geodirectorymemberpresspostlimit() {
+function run_geodirectorymemberpresspostlimit()
+{
 
 
 	$plugin = new Geodirectorymemberpresspostlimit();
 	$plugin->run();
-
 }
 run_geodirectorymemberpresspostlimit();
