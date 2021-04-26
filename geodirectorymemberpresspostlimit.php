@@ -80,7 +80,7 @@ require plugin_dir_path(__FILE__) . 'includes/class-geodirectorymemberpresspostl
  * then kicking off the plugin from this point in the file does
  * not affect the page life cycle.
  *
- * @since    1.0.0
+ * @since    1.0.1
  */
 
 function user_can_add_post2($args = array())
