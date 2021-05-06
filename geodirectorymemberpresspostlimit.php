@@ -17,7 +17,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/wp-content/plugins/geodirectory/inclu
  * @package           Geodirectorymemberpresspostlimit
  *
  * @wordpress-plugin
- * Plugin Name:       GeoDirectoryMemberPressPostLimit
+ * Plugin Name:       GeoDirectory MemberPress Post Limit
  * Plugin URI:        https://www.strainovic-it.ch
  * Description:       Beschränk die Anzahl Waschanlagen je nach Abo.
  * Version:           1.0.1
