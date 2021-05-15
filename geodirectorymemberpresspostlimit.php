@@ -13,14 +13,14 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/wp-content/plugins/geodirectory/inclu
  * that starts the plugin.
  *
  * @link              https://www.strainovic-it.ch
- * @since             1.0.2
+ * @since             1.0.3
  * @package           Geodirectorymemberpresspostlimit
  *
  * @wordpress-plugin
  * Plugin Name:       WP GeoDirectory MemberPress Limiter
  * Plugin URI:        https://www.strainovic-it.ch
  * Description:       Limit geoDirectory max. posts and image upload based on memberpress packages.
- * Version:           1.0.2
+ * Version:           1.0.3
  * Author:            Goran Strainovic
  * Author URI:        https://www.strainovic-it.ch
  * License:           GPL-2.0+
@@ -290,15 +290,15 @@ function run_shortcode()
 	if (current_user_can('mepr-active', $plusMitgliedschaft5WA) and $can_add_post['posts_count'] < 5) {
 		return do_shortcode($gd_add_listing); // Plus Abos unter 5x WA dürfen noch bis 5x WA erstellen
 	} elseif (current_user_can('mepr-active', $plusMitgliedschaft5WA) and $can_add_post['posts_count'] === 5) {
-		return do_shortcode('<h3>Bitte kontaktieren Sie uns für ein Spezialangebot, um mehr als 5x Waschanlagen hinzuzufügen.</h3>');
+		return ('<h3>Bitte kontaktieren Sie uns für ein Spezialangebot, um mehr als 5x Waschanlagen hinzuzufügen.</h3>');
 	} elseif (current_user_can('mepr-active', $standardMitgliedschaft1WA) and $can_add_post['posts_count'] === 0) {
 		return do_shortcode($gd_add_listing); // Standard ohne WA dürfen 1x WA erstellen
 	} elseif (isset($_GET['pid'])) { 
 		return do_shortcode($gd_add_listing); // bearbeiten immer möglich
 	} elseif (current_user_can('mepr-active', $standardMitgliedschaft1WA) and $can_add_post['posts_count'] === 1) {
-		return do_shortcode('<h3>Bitte erhöhen Sie Ihre Mitgliedschaft auf Plus um bis zu 5x Waschanlagen hinzuzufügen.</h3>'.$mehrAls5WA);
+		return('<h3>Bitte erhöhen Sie Ihre Mitgliedschaft auf Plus um bis zu 5x Waschanlagen hinzuzufügen.</h3>'.$mehrAls5WA);
 	} else {
-		return do_shortcode('<h3>Bitte schliessen Sie eine Mitgliedschaft ab um eine Waschanlagen hinzuzufügen.</h3><br><h3>Mit einer Plus Mitgliedschaft können Sie bis zu 5x Waschanlagen hinzufügen.</h3>'.$mehrAls5WA);
+		return('<h3>Bitte schliessen Sie eine Mitgliedschaft ab um eine Waschanlagen hinzuzufügen.</h3><br><h3>Mit einer Plus Mitgliedschaft können Sie bis zu 5x Waschanlagen hinzufügen.</h3>'.$mehrAls5WA);
 	}
 
 
