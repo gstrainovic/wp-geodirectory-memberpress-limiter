@@ -13,14 +13,14 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/wp-content/plugins/geodirectory/inclu
  * that starts the plugin.
  *
  * @link              https://www.strainovic-it.ch
- * @since             1.0.4
+ * @since             1.0.5
  * @package           Geodirectorymemberpresspostlimit
  *
  * @wordpress-plugin
  * Plugin Name:       WP GeoDirectory MemberPress Limiter
  * Plugin URI:        https://www.strainovic-it.ch
  * Description:       Limit geoDirectory max. posts and image upload based on memberpress packages.
- * Version:           1.0.4
+ * Version:           1.0.5
  * Author:            Goran Strainovic
  * Author URI:        https://www.strainovic-it.ch
  * License:           GPL-2.0+
