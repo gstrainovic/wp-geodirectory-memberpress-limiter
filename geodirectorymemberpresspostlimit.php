@@ -13,14 +13,14 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/wp-content/plugins/geodirectory/inclu
  * that starts the plugin.
  *
  * @link              https://www.strainovic-it.ch
- * @since             1.0.5
+ * @since             1.0.6
  * @package           Geodirectorymemberpresspostlimit
  *
  * @wordpress-plugin
  * Plugin Name:       WP GeoDirectory MemberPress Limiter
  * Plugin URI:        https://www.strainovic-it.ch
  * Description:       Limit geoDirectory max. posts and image upload based on memberpress packages.
- * Version:           1.0.5
+ * Version:           1.0.6
  * Author:            Goran Strainovic
  * Author URI:        https://www.strainovic-it.ch
  * License:           GPL-2.0+
@@ -227,6 +227,7 @@ function geodir_cfi_files2( $html, $cf ) {
  * @since    1.0.1
  */
 
+
 function user_can_add_post2($args = array())
 {
 
@@ -248,16 +249,15 @@ function user_can_add_post2($args = array())
 		if (!empty($params['post_author']) && !user_can((int) $params['post_author'], 'manage_options')) {
 			$posts_limit = (int) GeoDir_Post_Limit::cpt_posts_limit($params['post_type'], $params['post_author']);
 
-			if ($posts_limit > 0) {
-				$posts_count = (int) GeoDir_Post_Limit::count_user_cpt_posts($params);
+			$posts_count = (int) GeoDir_Post_Limit::count_user_cpt_posts($params);
 
-				// Limit exceed.
-				if ($posts_limit <= $posts_count) {
-					$can_add = false;
-				}
-			} else if ($posts_limit < 0) {
-				$can_add = false; // Disabled from CPT
-			}
+			// 	// Limit exceed.
+			// 	if ($posts_limit <= $posts_count) {
+			// 		$can_add = false;
+			// 	}
+			// } else if ($posts_limit < 0) {
+			// 	$can_add = false; // Disabled from CPT
+			// }
 		}
 	}
 
